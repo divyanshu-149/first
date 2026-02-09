@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Queen ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-bg: #0b0b0b;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at center, #1a0202 0%, #000 100%);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Background Sparkles */
+        #particles { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+        .slider-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            width: 100vw;
+            height: 100vh;
+            scrollbar-width: none;
+            position: relative;
+            z-index: 2;
+        }
+        .slider-container::-webkit-scrollbar { display: none; }
+
+        .card {
+            flex: 0 0 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: center;
+            padding: 20px;
+        }
+
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 20px;
+            border-radius: 40px;
+            width: 95%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        h2 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; margin-bottom: 25px; letter-spacing: 1px; }
+
+        /* --- THE CUSTOM CALENDAR GRID --- */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .date-tile {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 15px 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .date-tile:hover {
+            background: var(--gold);
+            transform: translateY(-5px);
+        }
+
+        .date-tile:hover .day-num, .date-tile:hover .day-name { color: #000; }
+
+        .day-num { font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+        .day-name { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; color: #aaa; }
+
+        /* --- THE BIG REVEAL OVERLAY --- */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 1000;
+            display: none; /* Controlled by JS */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .big-emoji { font-size: 7rem; margin-bottom: 20px; }
+        .big-title { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2.5rem; margin-bottom: 15px; }
+        .big-text { font-size: 1.2rem; line-height: 1.6; color: #ccc; max-width: 500px; margin-bottom: 30px; }
+
+        .btn-close {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-hint { position: fixed; bottom: 30px; width: 100%; text-align: center; color: var(--gold); font-size: 0.7rem; letter-spacing: 3px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles"></canvas>
+
+    <div id="overlay">
+        <div class="big-emoji" id="bigEmoji">❤️</div>
+        <h1 class="big-title" id="bigTitle">Title</h1>
+        <p class="big-text" id="bigText">Message</p>
+        <button class="btn-close" onclick="closeReveal()">Return to Calendar</button>
+    </div>
+
+    <div class="slider-container">
+        <div class="card">
+            <div class="glass-panel">
+                <h2>Our Journey</h2>
+                <p>Every mile between us is just a reminder that our love is stronger than any distance.</p>
+                <p style="margin-top: 20px; color: var(--gold); font-size: 0.8rem;">SWIPE TO BEGIN →</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="glass-panel">
+                <h2>Valentine's Week</h2>
+                <p style="font-size: 0.9rem; margin-bottom: 10px;">Select a day to unlock my heart</p>
+                
+                <div class="calendar-grid">
+                    <div class="date-tile" onclick="openReveal('07')">
+                        <span class="day-num">7</span>
+                        <span class="day-name">Rose</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('08')">
+                        <span class="day-num">8</span>
+                        <span class="day-name">Propose</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('09')">
+                        <span class="day-num">9</span>
+                        <span class="day-name">Choco</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('10')">
+                        <span class="day-num">10</span>
+                        <span class="day-name">Teddy</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('11')">
+                        <span class="day-num">11</span>
+                        <span class="day-name">Promise</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('12')">
+                        <span class="day-num">12</span>
+                        <span class="day-name">Hug</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('13')">
+                        <span class="day-num">13</span>
+                        <span class="day-name">Kiss</span>
+                    </div>
+                    <div class="date-tile" onclick="openReveal('14')">
+                        <span class="day-num">14</span>
+                        <span class="day-name">V-Day</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="glass-panel">
+                <h2>The Truth</h2>
+                <p>I don't just miss you; I carry you with me in everything I do. Can't wait for our next real date.</p>
+                <div style="font-size: 3rem; margin-top: 15px;">🍷✨</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-hint">EXPLORE HORIZONTALLY</div>
+
+    <script>
+        const wishes = {
+            "07": { title: "Happy Rose Day", emoji: "🌹", text: "Since I can't give you a real bouquet today, I hope this digital rose reminds you that you're the most beautiful flower in my garden." },
+            "08": { title: "Happy Propose Day", emoji: "💍", text: "Every day I wake up and choose you. Distance is temporary, but 'Us' is forever. Will you stay mine?" },
+            "09": { title: "Happy Chocolate Day", emoji: "🍫", text: "You're sweeter than any chocolate. Sending you virtual sweetness from across the miles!" },
+            "10": { title: "Happy Teddy Day", emoji: "🧸", text: "I wish I could be there to give you a hug as soft as a teddy. Imagine me holding you tight right now." },
+            "11": { title: "Happy Promise Day", emoji: "🤝", text: "I promise to always be your home, to bridge every mile with trust, and to never let you go." },
+            "12": { title: "Happy Hug Day", emoji: "🫂", text: "Sending a massive virtual hug! One day soon, I won't have to say 'virtual' anymore." },
+            "13": { title: "Happy Kiss Day", emoji: "😘", text: "A million kisses sent your way. I'm counting down the days until I can deliver them in person." },
+            "14": { title: "Happy Valentine's Day", emoji: "💝", text: "You are my heart, my soul, and my favorite adventure. Distance means so little when someone means so much. I love you!" }
+        };
+
+        function openReveal(day) {
+            const data = wishes[day];
+            document.getElementById('bigEmoji').innerText = data.emoji;
+            document.getElementById('bigTitle').innerText = data.title;
+            document.getElementById('bigText').innerText = data.text;
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        function closeReveal() {
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // --- Particle Script ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        for(let i=0; i<80; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 0.5 + 0.2
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(212, 175, 55, 0.5)";
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+                p.y -= p.speed;
+                if(p.y < -10) p.y = canvas.height + 10;
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
